@@ -35,6 +35,7 @@ const sharedPropertyDefinition = {
   set: noop
 }
 
+// 代理方法
 export function proxy (target: Object, sourceKey: string, key: string) {
   sharedPropertyDefinition.get = function proxyGetter () {
     return this[sourceKey][key]
@@ -45,17 +46,23 @@ export function proxy (target: Object, sourceKey: string, key: string) {
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
+// 初始化props、methods、data、computed与watch
 export function initState (vm: Component) {
   vm._watchers = []
   const opts = vm.$options
+  // 初始化props
   if (opts.props) initProps(vm, opts.props)
+  // 初始化方法
   if (opts.methods) initMethods(vm, opts.methods)
   if (opts.data) {
     initData(vm)
   } else {
+    // 该组件没有data的时候绑定一个空对象
     observe(vm._data = {}, true /* asRootData */)
   }
+  // 初始化computed
   if (opts.computed) initComputed(vm, opts.computed)
+  // 初始化watchers
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
   }
@@ -109,11 +116,17 @@ function initProps (vm: Component, propsOptions: Object) {
   toggleObserving(true)
 }
 
+/**
+ * 初始化data
+ * 一是将_data上面的数据代理到vm上，
+ * 二是通过执行 observe(data, true / asRootData /)将所有data变成可观察的，
+ * 即对data定义的每个属性进行getter/setter操作，这里就是Vue实现响应式的基础
+ * @param vm
+ */
 function initData (vm: Component) {
+  // 获取到data
   let data = vm.$options.data
-  data = vm._data = typeof data === 'function'
-    ? getData(data, vm)
-    : data || {}
+  data = vm._data = typeof data === 'function' ? getData(data, vm) : data || {}
   if (!isPlainObject(data)) {
     data = {}
     process.env.NODE_ENV !== 'production' && warn(
@@ -127,7 +140,9 @@ function initData (vm: Component) {
   const props = vm.$options.props
   const methods = vm.$options.methods
   let i = keys.length
+  // 遍历data中的数据
   while (i--) {
+    // 保证data中的key不与props中的key重复，props优先，如果有冲突会产生warning
     const key = keys[i]
     if (process.env.NODE_ENV !== 'production') {
       if (methods && hasOwn(methods, key)) {
@@ -143,11 +158,14 @@ function initData (vm: Component) {
         `Use prop default value instead.`,
         vm
       )
+      // 判断是否是保留字段
     } else if (!isReserved(key)) {
+      // 将data上面的属性代理到了vm实例上
       proxy(vm, `_data`, key)
     }
   }
   // observe data
+  // 这里通过observe实例化Observe对象，开始对数据进行绑定，asRootData用来根数据，用来计算实例化根数据的个数，下面会进行递归observe进行对深层对象的绑定。则asRootData为非true
   observe(data, true /* asRootData */)
 }
 

@@ -28,13 +28,14 @@ export function initMixin (Vue: Class<Component>) {
 
     // a flag to avoid this being observed
     vm._isVue = true
-    // merge options
+    // merge options 合并配置
     if (options && options._isComponent) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
+      // 将传入的配置合并到$options
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor),
         options || {},
@@ -49,13 +50,19 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
+    // 初始化生命周期
     initLifecycle(vm)
+    // 初始化事件中心
     initEvents(vm)
+    // 初始化Render
     initRender(vm)
+    // 调用beforeCreate钩子函数并且触发beforeCreate钩子事件
     callHook(vm, 'beforeCreate')
     initInjections(vm) // resolve injections before data/props
+    // 初始化props、methods、data、computed与watch
     initState(vm)
     initProvide(vm) // resolve provide after data/props
+    // 调用created钩子函数并且触发created钩子事件
     callHook(vm, 'created')
 
     /* istanbul ignore if */
@@ -65,6 +72,7 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    // 判断el 存在进行挂载
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }
