@@ -11,10 +11,7 @@ const isSpecialTag = makeMap('script,style,template', true)
 /**
  * Parse a single-file component (*.vue) file into an SFC Descriptor Object.
  */
-export function parseComponent (
-  content: string,
-  options?: Object = {}
-): SFCDescriptor {
+export function parseComponent (content: string, options?: Object): SFCDescriptor {
   const sfc: SFCDescriptor = {
     template: null,
     script: null,

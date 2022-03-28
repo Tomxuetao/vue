@@ -115,10 +115,7 @@ export function _createElement (
       // unknown or unlisted namespaced elements
       // check at runtime because it may get assigned a namespace when its
       // parent normalizes children
-      vnode = new VNode(
-        tag, data, children,
-        undefined, undefined, context
-      )
+      vnode = new VNode(tag, data, children, undefined, undefined, context)
     }
   } else {
     // direct component options / constructor

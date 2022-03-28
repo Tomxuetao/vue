@@ -138,11 +138,7 @@ export function lifecycleMixin (Vue: Class<Component>) {
   }
 }
 
-export function mountComponent (
-  vm: Component,
-  el: ?Element,
-  hydrating?: boolean
-): Component {
+export function mountComponent (vm: Component, el: ?Element, hydrating?: boolean): Component {
   vm.$el = el
   if (!vm.$options.render) {
     vm.$options.render = createEmptyVNode
@@ -212,13 +208,7 @@ export function mountComponent (
   return vm
 }
 
-export function updateChildComponent (
-  vm: Component,
-  propsData: ?Object,
-  listeners: ?Object,
-  parentVnode: MountedComponentVNode,
-  renderChildren: ?Array<VNode>
-) {
+export function updateChildComponent (vm: Component, propsData: ?Object, listeners: ?Object, parentVnode: MountedComponentVNode, renderChildren: ?Array<VNode>) {
   if (process.env.NODE_ENV !== 'production') {
     isUpdatingChildComponent = true
   }

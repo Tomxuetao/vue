@@ -28,18 +28,14 @@ export function initMixin (Vue: Class<Component>) {
 
     // a flag to avoid this being observed
     vm._isVue = true
-    // merge options
+    // merge options 合并配置
     if (options && options._isComponent) {
       // optimize internal component instantiation
       // since dynamic options merging is pretty slow, and none of the
       // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
-      vm.$options = mergeOptions(
-        resolveConstructorOptions(vm.constructor),
-        options || {},
-        vm
-      )
+      vm.$options = mergeOptions(resolveConstructorOptions(vm.constructor), options || {}, vm)
     }
     /* istanbul ignore else */
     if (process.env.NODE_ENV !== 'production') {
@@ -49,13 +45,27 @@ export function initMixin (Vue: Class<Component>) {
     }
     // expose real self
     vm._self = vm
+    // 初始化生命周期
     initLifecycle(vm)
+    // 初始化事件中心
     initEvents(vm)
+    // 初始化渲染
     initRender(vm)
+    // 调用beforeCreate生命周期
     callHook(vm, 'beforeCreate')
+    /**
+     *  初始化注入在数据初始化（data/props）之前 可以使用一对 provide 和 inject。无论组件层次结构有多深，父组件都可以作为其所有子组件的依赖提供者。
+     *  父组件有一个 provide 选项来提供数据，子组件有一个 inject 选项来开始使用这些数据。
+     */
     initInjections(vm) // resolve injections before data/props
+    // 初始化 data、props、computed、watcher
     initState(vm)
+    /**
+     *  初始化注入在数据初始化（data/props）之前 可以使用一对 provide 和 inject。无论组件层次结构有多深，父组件都可以作为其所有子组件的依赖提供者。
+     *  父组件有一个 provide 选项来提供数据，子组件有一个 inject 选项来开始使用这些数据。
+     */
     initProvide(vm) // resolve provide after data/props
+    // 调用created生命周期
     callHook(vm, 'created')
 
     /* istanbul ignore if */
@@ -65,6 +75,9 @@ export function initMixin (Vue: Class<Component>) {
       measure(`vue ${vm._name} init`, startTag, endTag)
     }
 
+    /**
+     * 如果有 el 属性，则调用 vm.$mount 方法挂载 vm，挂载的目标就是把模板渲染成最终的 DOM
+     */
     if (vm.$options.el) {
       vm.$mount(vm.$options.el)
     }

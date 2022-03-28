@@ -49,14 +49,17 @@ export function proxy (target: Object, sourceKey: string, key: string) {
 export function initState (vm: Component) {
   vm._watchers = []
   const opts = vm.$options
-  if (opts.props) initProps(vm, opts.props)
-  if (opts.methods) initMethods(vm, opts.methods)
+  if (opts.props)
+    initProps(vm, opts.props)
+  if (opts.methods)
+    initMethods(vm, opts.methods)
   if (opts.data) {
     initData(vm)
   } else {
     observe(vm._data = {}, true /* asRootData */)
   }
-  if (opts.computed) initComputed(vm, opts.computed)
+  if (opts.computed)
+    initComputed(vm, opts.computed)
   if (opts.watch && opts.watch !== nativeWatch) {
     initWatch(vm, opts.watch)
   }
@@ -210,11 +213,7 @@ function initComputed (vm: Component, computed: Object) {
   }
 }
 
-export function defineComputed (
-  target: any,
-  key: string,
-  userDef: Object | Function
-) {
+export function defineComputed (target: any, key: string, userDef: Object | Function) {
   const shouldCache = !isServerRendering()
   if (typeof userDef === 'function') {
     sharedPropertyDefinition.get = shouldCache
@@ -303,12 +302,7 @@ function initWatch (vm: Component, watch: Object) {
   }
 }
 
-function createWatcher (
-  vm: Component,
-  expOrFn: string | Function,
-  handler: any,
-  options?: Object
-) {
+function createWatcher (vm: Component, expOrFn: string | Function, handler: any, options?: Object) {
   if (isPlainObject(handler)) {
     options = handler
     handler = handler.handler

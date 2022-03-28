@@ -114,13 +114,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
   let ob: Observer | void
   if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
     ob = value.__ob__
-  } else if (
-    shouldObserve &&
-    !isServerRendering() &&
-    (Array.isArray(value) || isPlainObject(value)) &&
-    Object.isExtensible(value) &&
-    !value._isVue
-  ) {
+  } else if (shouldObserve && !isServerRendering() && (Array.isArray(value) || isPlainObject(value)) && Object.isExtensible(value) && !value._isVue) {
     ob = new Observer(value)
   }
   if (asRootData && ob) {
@@ -132,13 +126,7 @@ export function observe (value: any, asRootData: ?boolean): Observer | void {
 /**
  * Define a reactive property on an Object.
  */
-export function defineReactive (
-  obj: Object,
-  key: string,
-  val: any,
-  customSetter?: ?Function,
-  shallow?: boolean
-) {
+export function defineReactive (obj: Object, key: string, val: any, customSetter?: ?Function, shallow?: boolean) {
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
