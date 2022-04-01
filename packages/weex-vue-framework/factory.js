@@ -3457,10 +3457,7 @@ function createComponent (
   return vnode
 }
 
-function createComponentInstanceForVnode (
-  vnode, // we know it's MountedComponentVNode but flow doesn't
-  parent // activeInstance in lifecycle state
-) {
+function createComponentInstanceForVnode (vnode, parent) {
   var options = {
     _isComponent: true,
     _parentVnode: vnode,

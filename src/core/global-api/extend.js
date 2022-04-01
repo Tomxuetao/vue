@@ -15,6 +15,9 @@ export function initExtend (Vue: GlobalAPI) {
 
   /**
    * Class inheritance
+   *
+   * 构造一个 Vue 的子类
+   * 使用一种非常经典的原型继承的方式把一个纯对象转换一个继承于 Vue 的构造器 Sub 并返回
    */
   Vue.extend = function (extendOptions: Object): Function {
     extendOptions = extendOptions || {}
@@ -30,6 +33,11 @@ export function initExtend (Vue: GlobalAPI) {
       validateComponentName(name)
     }
 
+    /**
+     * 实例化时执行_init()方法
+     * @param options
+     * @constructor
+     */
     const Sub = function VueComponent (options) {
       this._init(options)
     }
@@ -59,6 +67,9 @@ export function initExtend (Vue: GlobalAPI) {
 
     // create asset registers, so extended classes
     // can have their private assets too.
+    /**
+     *  ASSET_TYPES = ['component', 'directive', 'filter']
+     */
     ASSET_TYPES.forEach(function (type) {
       Sub[type] = Super[type]
     })
@@ -74,7 +85,7 @@ export function initExtend (Vue: GlobalAPI) {
     Sub.extendOptions = extendOptions
     Sub.sealedOptions = extend({}, Sub.options)
 
-    // cache constructor
+    // cache constructor; 缓存避免多次执行extend方法对同一个子组件重复构造。
     cachedCtors[SuperId] = Sub
     return Sub
   }

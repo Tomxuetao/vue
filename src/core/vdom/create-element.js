@@ -25,14 +25,7 @@ const ALWAYS_NORMALIZE = 2
 
 // wrapper function for providing a more flexible interface
 // without getting yelled at by flow
-export function createElement (
-  context: Component,
-  tag: any,
-  data: any,
-  children: any,
-  normalizationType: any,
-  alwaysNormalize: boolean
-): VNode | Array<VNode> {
+export function createElement (context: Component, tag: any, data: any, children: any, normalizationType: any, alwaysNormalize: boolean): VNode | Array<VNode> {
   if (Array.isArray(data) || isPrimitive(data)) {
     normalizationType = children
     children = data
@@ -44,13 +37,7 @@ export function createElement (
   return _createElement(context, tag, data, children, normalizationType)
 }
 
-export function _createElement (
-  context: Component,
-  tag?: string | Class<Component> | Function | Object,
-  data?: VNodeData,
-  children?: any,
-  normalizationType?: number
-): VNode | Array<VNode> {
+export function _createElement (context: Component, tag?: string | Class<Component> | Function | Object, data?: VNodeData, children?: any, normalizationType?: number): VNode | Array<VNode> {
   if (isDef(data) && isDef((data: any).__ob__)) {
     process.env.NODE_ENV !== 'production' && warn(
       `Avoid using observed data object as vnode data: ${JSON.stringify(data)}\n` +
@@ -68,21 +55,13 @@ export function _createElement (
     return createEmptyVNode()
   }
   // warn against non-primitive key
-  if (process.env.NODE_ENV !== 'production' &&
-    isDef(data) && isDef(data.key) && !isPrimitive(data.key)
-  ) {
+  if (process.env.NODE_ENV !== 'production' && isDef(data) && isDef(data.key) && !isPrimitive(data.key)) {
     if (!__WEEX__ || !('@binding' in data.key)) {
-      warn(
-        'Avoid using non-primitive value as key, ' +
-        'use string/number value instead.',
-        context
-      )
+      warn('Avoid using non-primitive value as key, ' + 'use string/number value instead.', context)
     }
   }
   // support single function children as default scoped slot
-  if (Array.isArray(children) &&
-    typeof children[0] === 'function'
-  ) {
+  if (Array.isArray(children) && typeof children[0] === 'function') {
     data = data || {}
     data.scopedSlots = { default: children[0] }
     children.length = 0

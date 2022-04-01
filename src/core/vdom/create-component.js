@@ -119,7 +119,7 @@ export function createComponent (Ctor: Class<Component> | Function | Object | vo
     return
   }
 
-  // async component
+  // async component 创建异步组件
   let asyncFactory
   if (isUndef(Ctor.cid)) {
     asyncFactory = Ctor
