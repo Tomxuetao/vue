@@ -13,20 +13,28 @@ import { warn } from '../util/index'
  */
 
 function Vue (options) {
+  // Vue 构造函数  Vue 只能通过 new 关键字初始化，然后会调用 this._init 方法
   if (process.env.NODE_ENV !== 'production' && !(this instanceof Vue)) {
     warn('Vue is a constructor and should be called with the `new` keyword')
   }
-  // 执行Vue.prototype._init(options)
+  // Vue.prototype._init方法 该方法是在 initMixin 中定义的,其入参options就是我们定义的对象时传入的参数对象
   this._init(options)
 }
 
 /**
- * Vue.prototype 上挂在一些方法（_init、$set、$delete、$watch、$on、$once、$off、$emit、_update、$forceUpdate、$destroy、$nextTick、_render）
+ * 执行xxxMixin方法，初始化相关的功能定义
+ * 每一个Mixin都是向Vue的原型上添加一些属性或者方法
  */
+
+// 合并配置
 initMixin(Vue)
+// 初始化 data、props、computed、watcher
 stateMixin(Vue)
+// 初始化事件中心
 eventsMixin(Vue)
+// 初始化生命周期,调用声明周期钩子函数
 lifecycleMixin(Vue)
+// 初始化渲染
 renderMixin(Vue)
 
 export default Vue
